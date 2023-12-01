@@ -156,6 +156,8 @@ contract TTTDemo is CCIPReceiver, OwnerIsCreator {
 
         s_linkToke.approve(address(router), fees);
 
+        // 两种付费模式，可用原生代币也可使用Link代币
+
         messageId = router.ccipSend{value: fees}(destinationChainSelector, evm2AnyMessage);
 
         emit MessageSent(messageId, destinationChainSelector, receiver, message, fees);
@@ -201,6 +203,14 @@ contract TTTDemo is CCIPReceiver, OwnerIsCreator {
             if (gs.player2 == address(0)) {
                 gameSessions[sessionId].player2 = msg.sender;
             }
+
+            //////////////////////////////////////
+            //  x=0 y=0  // x=0 y=1  // x=0 y=2 //
+            //////////////////////////////////////
+            //  x=1 y=0  // x=1 y=1  // x=1 y=2 //
+            /////////////////////////////////////
+            //  x=2 y=0  // x=2 y=1  // x=2 y=2 //
+            //////////////////////////////////////
 
             if (gs.play1Status[x * 3 + y] == 0 && gs.play2Status[x * 3 + y] == 0) {
                 gameSessions[sessionId].play2Status[x * 3 + y] = 1;
