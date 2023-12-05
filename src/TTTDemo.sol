@@ -141,8 +141,8 @@ contract TTTDemo is CCIPReceiver, OwnerIsCreator {
             receiver: abi.encode(receiver),
             data: abi.encode(message),
             tokenAmounts: new Client.EVMTokenAmount[](0),
-            extraArgs: Client._argsToBytes(Client.EVMExtraArgsV1({gasLimit: 400_00, strict: false})),
-            feeToken: address(0)
+            extraArgs: Client._argsToBytes(Client.EVMExtraArgsV1({gasLimit: 400_000, strict: false})),
+            feeToken: _linkToken
         });
         IRouterClient router = IRouterClient(_router);
 
@@ -158,7 +158,7 @@ contract TTTDemo is CCIPReceiver, OwnerIsCreator {
 
         // 两种付费模式，可用原生代币也可使用Link代币
 
-        messageId = router.ccipSend{value: fees}(destinationChainSelector, evm2AnyMessage);
+        messageId = router.ccipSend(destinationChainSelector, evm2AnyMessage);
 
         emit MessageSent(messageId, destinationChainSelector, receiver, message, fees);
 
@@ -274,5 +274,9 @@ contract TTTDemo is CCIPReceiver, OwnerIsCreator {
         if (!sent) {
             revert FailedToWithdrawEth(msg.sender, beneficary, amount);
         }
+    }
+
+    function description() public pure returns (string memory) {
+        return "this is version 0.0";
     }
 }
